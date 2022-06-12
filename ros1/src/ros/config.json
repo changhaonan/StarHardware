@@ -1,0 +1,15 @@
+{
+  "topics" : [
+	"/camera1/depth/color/points",
+	"/camera2/depth/color/points",
+	"/camera3/depth/color/points"
+  ],
+  "tf_type": [
+	"fixed",
+	"fixed",
+	"fixed"
+  ],
+  "fixed_tf": [
+
+  ]
+}
