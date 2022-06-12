@@ -84,8 +84,8 @@ if __name__=="__main__":
     d_num_cam = 3
     d_num_frame = 30
     d_step_frame = 10
-    img_dir_path_root = "WebViewer3D/ros/data/test_data/calibration"
-    intrinsic_path = "WebViewer3D/ros/data/io.yaml"
+    img_dir_path_root = "Easy3DViewer/ros/data/test_data/calibration"
+    intrinsic_path = "Easy3DViewer/ros/data/io.yaml"
     # Intrinsics
     intrinsics = list()
     with open(intrinsic_path, 'r') as stream:
@@ -130,5 +130,5 @@ if __name__=="__main__":
         
         feature_poses.append(feature_pose_frame)
     
-    with open("WebViewer3D/ros/data/feature_poses.json", "w") as output_file:
+    with open("Easy3DViewer/ros/data/feature_poses.json", "w") as output_file:
         json.dump(feature_poses, output_file)

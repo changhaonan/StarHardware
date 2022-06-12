@@ -231,7 +231,7 @@ namespace multicam_calibration {
 		ROS_INFO("Start saving / preparing.");
 		Calibrator<num_camera> calibrator(cam_to_worlds);
 
-		auto &context = WebViewer3D::Context::Instance();
+		auto &context = Easy3DViewer::Context::Instance();
 		for (auto frame_idx = 0; frame_idx < multi_calibration_dataset_.size(); ++frame_idx) {
 			if (frame_idx >= frame_transfer) break;
 			
@@ -325,7 +325,7 @@ int main(int argc, char** argv) {
         camera_pose_path = "data/camera_pose.yaml";
     }
 
-	auto &context = WebViewer3D::Context::Instance();
+	auto &context = Easy3DViewer::Context::Instance();
 	auto file_dir = boost::filesystem::path(std::string(__FILE__));
 	std::string save_path = file_dir.parent_path().string() + "/../../../public/test_data/Calibration/";
 	ROS_INFO("Save path is : %s", save_path.c_str());

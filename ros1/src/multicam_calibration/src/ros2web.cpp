@@ -238,7 +238,7 @@ namespace multicam_calibration {
             
             for (auto cam_idx = 0; cam_idx < num_camera; ++cam_idx) {
                 // Color Image
-                auto color_img_name = WebViewer3D::FileNameVolumeDeform(output_path, cam_idx, save_frame_idx, WebViewer3D::color_img_file);
+                auto color_img_name = Easy3DViewer::FileNameVolumeDeform(output_path, cam_idx, save_frame_idx, Easy3DViewer::color_img_file);
                 auto color_img_ptr = cv_bridge::toCvCopy(
                     multi_calibration_dataset_[frame_idx].m_color_images[cam_idx], "bgr8");
                 // Check existence && create recursively
@@ -248,7 +248,7 @@ namespace multicam_calibration {
                 cv::imwrite(color_img_name.string(), color_img_ptr->image);
                 ROS_INFO("Saving to %s", color_img_name.string().c_str());
                 // Depth Image
-                auto depth_img_name = WebViewer3D::FileNameVolumeDeform(output_path, cam_idx, save_frame_idx, WebViewer3D::depth_img_file);
+                auto depth_img_name = Easy3DViewer::FileNameVolumeDeform(output_path, cam_idx, save_frame_idx, Easy3DViewer::depth_img_file);
                 auto depth_img_ptr = cv_bridge::toCvCopy(multi_calibration_dataset_[frame_idx].m_depth_images[cam_idx]);
                  // Check existence && create recursively
                 if (!boost::filesystem::is_directory(depth_img_name.parent_path())) {
@@ -275,7 +275,7 @@ namespace multicam_calibration {
             std::string cam_name = "cam" + std::to_string(cam_idx);
             // Extrinsic
             json exstrinsic_json;
-            WebViewer3D::WriteMatrix<double, 4, 4>(
+            Easy3DViewer::WriteMatrix<double, 4, 4>(
                 cam_to_worlds[cam_idx], exstrinsic_json
             );
             output_json[cam_name]["extrinsic"] = exstrinsic_json;
@@ -349,7 +349,7 @@ int main(int argc, char** argv) {
     else {
         camera_pose_path = "data/camera_pose.yaml";
     }
-    auto& context = WebViewer3D::Context::Instance();
+    auto& context = Easy3DViewer::Context::Instance();
     auto file_dir = boost::filesystem::path(std::string(__FILE__));
     std::string save_path = file_dir.parent_path().string() + "/../../../public/test_data/Calibration/";
     ROS_INFO("Save path is : %s", save_path.c_str());

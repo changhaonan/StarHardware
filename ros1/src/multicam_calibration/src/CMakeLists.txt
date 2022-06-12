@@ -1,7 +1,16 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(multicam_calibration)
 
+# CMAKE PrefixList
+list(APPEND CMAKE_PREFIX_PATH "/usr/lib/x86_64-linux-gnu/cmake")
+list(APPEND CMAKE_PREFIX_PATH "/usr/lib/x86_64-linux-gnu")
+list(APPEND CMAKE_PREFIX_PATH "/usr/local")
+list(APPEND CMAKE_PREFIX_PATH "/usr/share")
+list(APPEND CMAKE_PREFIX_PATH "/usr/include")
+list(APPEND CMAKE_PREFIX_PATH "/usr")
+
 ## Find catkin and any catkin packages
+# find_package(Eigen 3.3.7 EXACT REQUIRED)
 find_package(catkin REQUIRED COMPONENTS roscpp rospy std_msgs sensor_msgs message_filters rosbag cv_bridge apriltag_ros apriltag_msgs)
 find_package(Boost 1.50)
 find_package(PCL REQUIRED COMPONENTS common io registration search kdtree)
@@ -14,7 +23,7 @@ set(YAML_CPP_LIBRARIES "/usr/local/lib/libyaml-cpp.so")
 set(YAML_CPP_INCLUDE_DIRS "/usr/local/include/")
 
 ## Context set
-set(context_dir "${CMAKE_CURRENT_LIST_DIR}/../../../include")
+set(context_dir "${CMAKE_CURRENT_LIST_DIR}/../../../../external/Easy3DViewer/utils/cpp/")
 
 ## Declare a catkin package
 catkin_package(

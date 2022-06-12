@@ -70,7 +70,7 @@ int main(int argc, char** argv) {
         camera_pose_path = "data/camera_pose.yaml";
     }
     
-	auto &context = WebViewer3D::Context::Instance();
+	auto &context = Easy3DViewer::Context::Instance();
 	auto file_dir = boost::filesystem::path(std::string(__FILE__));
 	std::string save_path = file_dir.parent_path().string() + "/../../../public/test_data/Calibration/";
 
@@ -101,7 +101,7 @@ int main(int argc, char** argv) {
     // Create point cloud
     const float clip_near = 0.1;
     const float clip_far = 1.0;
-    const std::string img_dir_path_root = "WebViewer3D/ros/data/test_data/test";
+    const std::string img_dir_path_root = "Easy3DViewer/ros/data/test_data/test";
     pcl::PointCloud<pcl::PointXYZ>::Ptr point_clouds[d_num_camera];
     pcl::PointCloud<pcl::PointNormal>::Ptr point_clouds_exp[d_num_camera];
     // Pointcloud initialization
