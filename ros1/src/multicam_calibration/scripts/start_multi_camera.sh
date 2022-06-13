@@ -1,1 +1,0 @@
-roslaunch realsense2_camera rs_multiple_devices.launch serial_no_camera1:=109422062805 serial_no_camera2:=104122062163 serial_no_camera3:=749512060230

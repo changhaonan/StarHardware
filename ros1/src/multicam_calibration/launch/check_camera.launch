@@ -1,0 +1,4 @@
+<launch>
+  <!-- Run rviz -->
+  <node pkg="rviz" type="rviz" name="rviz_record_data" args="-d $(find multicam_calibration)/config/calibration.rviz" />
+</launch>
