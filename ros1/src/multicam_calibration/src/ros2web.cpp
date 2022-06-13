@@ -108,6 +108,7 @@ namespace multicam_calibration {
         const std::string& filename,
         const std::string& io_config_path,
         const std::string& camera_pose_path,
+        const std::string& dump_path,
         unsigned frame_start,
         unsigned frame_end) {
         // Initialization
@@ -225,8 +226,7 @@ namespace multicam_calibration {
 
         // Write pcd and io_config here
         ROS_INFO("Start saving / preparing.");
-        std::string output_path_str = io_config["output_path"].as<std::string>();
-        boost::filesystem::path output_path(output_path_str);
+        boost::filesystem::path output_path(dump_path);
         output_path /= data_name;  // add data name
         boost::filesystem::remove_all(output_path);  // Clean
 
@@ -307,58 +307,33 @@ namespace multicam_calibration {
 int main(int argc, char** argv) {
     ros::init(argc, argv, "multi_depth_calibration");
     ros::NodeHandle nh("multi_depth_calibration");
-    std::string data_name, bag_path, io_config_path, apriltag_path, camera_pose_path;
+    std::string data_name, bag_path, io_config_path, apriltag_path, camera_pose_path, vis_path, dump_path;
     unsigned frame_start, frame_end;
     // Parse configs
-    if (argc > 1) {
-        data_name = std::string(argv[1]);
-    }
-    else {
-        data_name = "test";
-    }
-    if (argc > 2) {
-        frame_start = (unsigned)std::stoi(std::string(argv[2]));
-    }
-    else {
-        frame_start = 50;  // Large-frame; Tranfer all
-    }
-    if (argc > 3) {
-        frame_end = (unsigned)std::stoi(std::string(argv[3]));
-    }
-    else {
-        frame_end = 150;
-    }
-    if (argc > 4) {
-        bag_path = std::string(argv[4]);
-    }
-    else {
-        char bag_path_str[20];
-        sprintf(bag_path_str, "data/%s.bag", data_name.c_str());
-        bag_path = std::string(bag_path_str);
-    }
-    // Camera configuration
-    if (argc > 5) {
-        io_config_path = std::string(argv[5]);
-    }
-    else {
-        io_config_path = "data/io.yaml";
-    }
-    if (argc > 6) {
-        camera_pose_path = std::string(argv[6]);
-    }
-    else {
-        camera_pose_path = "data/camera_pose.yaml";
-    }
+    data_name = std::string(argv[1]);
+    frame_start = (unsigned)std::stoi(std::string(argv[2]));
+    frame_end = (unsigned)std::stoi(std::string(argv[3]));
+    bag_path = std::string(argv[4]);
+    io_config_path = std::string(argv[5]);
+    camera_pose_path = std::string(argv[6]);
+    vis_path = std::string(argv[7]);
+    dump_path = std::string(argv[8]);
+
     auto& context = Easy3DViewer::Context::Instance();
     auto file_dir = boost::filesystem::path(std::string(__FILE__));
-    std::string save_path = file_dir.parent_path().string() + "/../../../public/test_data/Calibration/";
-    ROS_INFO("Save path is : %s", save_path.c_str());
-    context.setDir(save_path, "frame");
+    ROS_INFO("Save path is : %s", vis_path.c_str());
+    context.setDir(vis_path, "frame");
     context.clearDir();
     
     // Transfer
     multicam_calibration::TransferData<multicam_calibration::num_camera>(
-        data_name, bag_path, io_config_path, camera_pose_path, frame_start, frame_end);
+        data_name, 
+        bag_path, 
+        io_config_path, 
+        camera_pose_path, 
+        dump_path,
+        frame_start, 
+        frame_end);
     ros::shutdown();
 
     return 0;

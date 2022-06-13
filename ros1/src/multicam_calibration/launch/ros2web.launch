@@ -3,5 +3,7 @@
   <arg name="start"           default="10"/>
   <arg name="end"             default="100"/>
   <arg name="camera_pos_file" default="camera_id.yaml"/>
-  <node pkg="multicam_calibration" type="ros2web" args="${data} ${start} ${end} ${find multicam_calibration}/data/${data}.bag ${find multicam_calibration}/config/io.yaml ${find multicam_calibration}/data/${camera_pos_file}" />
+  <arg name="vis_dir"         default="calibration"/>
+  <arg name="dump_dir"        default="calibration"/>
+  <node pkg="multicam_calibration" name="ros2web" type="ros2web" args="${data} ${start} ${end} ${find multicam_calibration}/data/${data}.bag ${find multicam_calibration}/config/io.yaml ${find multicam_calibration}/data/${camera_pos_file} ${find multicam_calibration}/../../../external/Easy3DViewer/public/test_data/${vis_dir} ${find multicam_calibration}/data/dump/${dump_dir}" />
 </launch>
