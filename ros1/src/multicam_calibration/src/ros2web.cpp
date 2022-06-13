@@ -129,16 +129,16 @@ namespace multicam_calibration {
         bag.open(filename, rosbag::bagmode::Read);
 
         // Topics: PointCloud
-        std::string point_cloud_topic_0 = io_config["cam0"]["point_cloud_topic"].as<std::string>();
-        std::string point_cloud_topic_1 = io_config["cam1"]["point_cloud_topic"].as<std::string>();
-        std::string point_cloud_topic_2 = io_config["cam2"]["point_cloud_topic"].as<std::string>();
+        std::string point_cloud_topic_0 = io_config["cam-0"]["point_cloud_topic"].as<std::string>();
+        std::string point_cloud_topic_1 = io_config["cam-1"]["point_cloud_topic"].as<std::string>();
+        std::string point_cloud_topic_2 = io_config["cam-2"]["point_cloud_topic"].as<std::string>();
         // Topics: Color & Depth
-        std::string depth_image_topic_0 = io_config["cam0"]["depth_topic"].as<std::string>();
-        std::string depth_image_topic_1 = io_config["cam1"]["depth_topic"].as<std::string>();
-        std::string depth_image_topic_2 = io_config["cam2"]["depth_topic"].as<std::string>();
-        std::string color_image_topic_0 = io_config["cam0"]["color_topic"].as<std::string>();
-        std::string color_image_topic_1 = io_config["cam1"]["color_topic"].as<std::string>();
-        std::string color_image_topic_2 = io_config["cam2"]["color_topic"].as<std::string>();
+        std::string depth_image_topic_0 = io_config["cam-0"]["depth_topic"].as<std::string>();
+        std::string depth_image_topic_1 = io_config["cam-1"]["depth_topic"].as<std::string>();
+        std::string depth_image_topic_2 = io_config["cam-2"]["depth_topic"].as<std::string>();
+        std::string color_image_topic_0 = io_config["cam-0"]["color_topic"].as<std::string>();
+        std::string color_image_topic_1 = io_config["cam-1"]["color_topic"].as<std::string>();
+        std::string color_image_topic_2 = io_config["cam-2"]["color_topic"].as<std::string>();
 
         // PointCloud2 topics to load
         std::vector<std::string> topics;
@@ -311,16 +311,22 @@ int main(int argc, char** argv) {
     unsigned frame_start, frame_end;
     // Parse configs
     data_name = std::string(argv[1]);
+    std::cout << "data_name: " << data_name << std::endl;
     frame_start = (unsigned)std::stoi(std::string(argv[2]));
     frame_end = (unsigned)std::stoi(std::string(argv[3]));
+    std::cout << "frame: " << frame_start << ", " << frame_end << std::endl;
     bag_path = std::string(argv[4]);
+    std::cout << "bag_path: " << bag_path << std::endl; 
     io_config_path = std::string(argv[5]);
+    std::cout << "io_config_path: " << io_config_path << std::endl;
     camera_pose_path = std::string(argv[6]);
+    std::cout << "camera_pose_path: " << camera_pose_path << std::endl;
     vis_path = std::string(argv[7]);
+    std::cout << "vis_path: " << vis_path << std::endl;
     dump_path = std::string(argv[8]);
+    std::cout << "dump_path: " << dump_path << std::endl;
 
     auto& context = Easy3DViewer::Context::Instance();
-    auto file_dir = boost::filesystem::path(std::string(__FILE__));
     ROS_INFO("Save path is : %s", vis_path.c_str());
     context.setDir(vis_path, "frame");
     context.clearDir();

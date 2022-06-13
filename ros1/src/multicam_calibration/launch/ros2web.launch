@@ -5,5 +5,5 @@
   <arg name="camera_pos_file" default="camera_id.yaml"/>
   <arg name="vis_dir"         default="calibration"/>
   <arg name="dump_dir"        default="calibration"/>
-  <node pkg="multicam_calibration" name="ros2web" type="ros2web" args="${data} ${start} ${end} ${find multicam_calibration}/data/${data}.bag ${find multicam_calibration}/config/io.yaml ${find multicam_calibration}/data/${camera_pos_file} ${find multicam_calibration}/../../../external/Easy3DViewer/public/test_data/${vis_dir} ${find multicam_calibration}/data/dump/${dump_dir}" />
+  <node pkg="multicam_calibration" name="ros2web" output="screen" type="ros2web" args="$(arg data) $(arg start) $(arg end) $(find multicam_calibration)/data/$(arg data).bag $(find multicam_calibration)/config/io.yaml $(find multicam_calibration)/data/result/$(arg camera_pos_file) $(find multicam_calibration)/../../../external/Easy3DViewer/public/test_data/$(arg vis_dir) $(find multicam_calibration)/data/dump/$(arg dump_dir)" />
 </launch>
