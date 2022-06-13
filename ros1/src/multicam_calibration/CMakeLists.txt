@@ -1,13 +1,13 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(multicam_calibration)
 
-# CMAKE PrefixList
-list(APPEND CMAKE_PREFIX_PATH "/usr/lib/x86_64-linux-gnu/cmake")
-list(APPEND CMAKE_PREFIX_PATH "/usr/lib/x86_64-linux-gnu")
-list(APPEND CMAKE_PREFIX_PATH "/usr/local")
-list(APPEND CMAKE_PREFIX_PATH "/usr/share")
-list(APPEND CMAKE_PREFIX_PATH "/usr/include")
-list(APPEND CMAKE_PREFIX_PATH "/usr")
+# # CMAKE PrefixList
+# list(APPEND CMAKE_PREFIX_PATH "/usr/lib/x86_64-linux-gnu/cmake")
+# list(APPEND CMAKE_PREFIX_PATH "/usr/lib/x86_64-linux-gnu")
+# list(APPEND CMAKE_PREFIX_PATH "/usr/local")
+# list(APPEND CMAKE_PREFIX_PATH "/usr/share")
+# list(APPEND CMAKE_PREFIX_PATH "/usr/include")
+# list(APPEND CMAKE_PREFIX_PATH "/usr")
 
 ## Find catkin and any catkin packages
 # find_package(Eigen 3.3.7 EXACT REQUIRED)

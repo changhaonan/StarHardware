@@ -108,7 +108,7 @@ namespace multicam_calibration {
         const std::string& filename,
         const std::string& io_config_path,
         const std::string& camera_pose_path,
-        const std::string& dump_path,
+        const std::string& dump_root_path,
         unsigned frame_start,
         unsigned frame_end) {
         // Initialization
@@ -226,9 +226,9 @@ namespace multicam_calibration {
 
         // Write pcd and io_config here
         ROS_INFO("Start saving / preparing.");
-        boost::filesystem::path output_path(dump_path);
-        output_path /= data_name;  // add data name
-        boost::filesystem::remove_all(output_path);  // Clean
+        boost::filesystem::path dump_path(dump_root_path);
+        dump_path /= data_name;  // add data name
+        boost::filesystem::remove_all(dump_path);  // Clean
 
         for (auto frame_idx = 0; frame_idx < multi_calibration_dataset_.size(); ++frame_idx) {
             if (frame_idx < frame_start) continue;
@@ -238,7 +238,7 @@ namespace multicam_calibration {
             
             for (auto cam_idx = 0; cam_idx < num_camera; ++cam_idx) {
                 // Color Image
-                auto color_img_name = Easy3DViewer::FileNameVolumeDeform(output_path, cam_idx, save_frame_idx, Easy3DViewer::color_img_file);
+                auto color_img_name = Easy3DViewer::FileNameVolumeDeform(dump_path, cam_idx, save_frame_idx, Easy3DViewer::color_img_file);
                 auto color_img_ptr = cv_bridge::toCvCopy(
                     multi_calibration_dataset_[frame_idx].m_color_images[cam_idx], "bgr8");
                 // Check existence && create recursively
@@ -248,7 +248,7 @@ namespace multicam_calibration {
                 cv::imwrite(color_img_name.string(), color_img_ptr->image);
                 ROS_INFO("Saving to %s", color_img_name.string().c_str());
                 // Depth Image
-                auto depth_img_name = Easy3DViewer::FileNameVolumeDeform(output_path, cam_idx, save_frame_idx, Easy3DViewer::depth_img_file);
+                auto depth_img_name = Easy3DViewer::FileNameVolumeDeform(dump_path, cam_idx, save_frame_idx, Easy3DViewer::depth_img_file);
                 auto depth_img_ptr = cv_bridge::toCvCopy(multi_calibration_dataset_[frame_idx].m_depth_images[cam_idx]);
                  // Check existence && create recursively
                 if (!boost::filesystem::is_directory(depth_img_name.parent_path())) {
@@ -268,7 +268,7 @@ namespace multicam_calibration {
          * width,
          * height
          */
-        boost::filesystem::path output_config_path = output_path / "config.json";
+        boost::filesystem::path output_config_path = dump_path / "config.json";
         json output_json;
         
         for (auto cam_idx = 0; cam_idx < num_camera; ++cam_idx) {
@@ -307,7 +307,7 @@ namespace multicam_calibration {
 int main(int argc, char** argv) {
     ros::init(argc, argv, "multi_depth_calibration");
     ros::NodeHandle nh("multi_depth_calibration");
-    std::string data_name, bag_path, io_config_path, apriltag_path, camera_pose_path, vis_path, dump_path;
+    std::string data_name, bag_path, io_config_path, apriltag_path, camera_pose_path, vis_path, dump_root_path;
     unsigned frame_start, frame_end;
     // Parse configs
     data_name = std::string(argv[1]);
@@ -323,8 +323,8 @@ int main(int argc, char** argv) {
     std::cout << "camera_pose_path: " << camera_pose_path << std::endl;
     vis_path = std::string(argv[7]);
     std::cout << "vis_path: " << vis_path << std::endl;
-    dump_path = std::string(argv[8]);
-    std::cout << "dump_path: " << dump_path << std::endl;
+    dump_root_path = std::string(argv[8]);
+    std::cout << "dump_root_path: " << dump_root_path << std::endl;
 
     auto& context = Easy3DViewer::Context::Instance();
     ROS_INFO("Save path is : %s", vis_path.c_str());
@@ -337,7 +337,7 @@ int main(int argc, char** argv) {
         bag_path, 
         io_config_path, 
         camera_pose_path, 
-        dump_path,
+        dump_root_path,
         frame_start, 
         frame_end);
     ros::shutdown();
