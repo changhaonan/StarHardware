@@ -1,0 +1,12 @@
+<launch>
+  <!-- Start multiple camera -->
+  <include file="$(find realsense2_camera)/launch/rs_multiple_devices.launch">
+    <arg name="align_depth" value="true"/>
+    <arg name="serial_no_camera1" value="109422062805"/>
+    <arg name="serial_no_camera1" value="104122062163"/>
+    <arg name="serial_no_camera1" value="749512060230"/>
+  </include>
+  <!-- Record bag -->
+  <node pkg="rosbag" type="record" name="rosbag_record_data"  respawn="true" output="screen" args="-b 2048 -o $(find multicam_calibration)/data/realsense2 /tf /tf_static /camera0/color/image_raw /camera0/aligned_depth_to_color/image_raw /camera0/depth/color/points /camera1/color/image_raw /camera1/aligned_depth_to_color/image_raw /camera1/depth/color/points /camera2/color/image_raw /camera2/aligned_depth_to_color/image_raw /camera2/depth/color/points" />
+  <node pkg="rviz" type="rviz" args="-d $(find multicam_calibration)/config/calibration.rviz" />
+</launch>

@@ -23,7 +23,7 @@ set(YAML_CPP_LIBRARIES "/usr/local/lib/libyaml-cpp.so")
 set(YAML_CPP_INCLUDE_DIRS "/usr/local/include/")
 
 ## Context set
-set(context_dir "${CMAKE_CURRENT_LIST_DIR}/../../../../external/Easy3DViewer/utils/cpp/")
+set(context_dir "${CMAKE_CURRENT_LIST_DIR}/../../../external/Easy3DViewer/utils/cpp/")
 
 ## Declare a catkin package
 catkin_package(
@@ -41,10 +41,10 @@ include_directories(include ${Boost_INCLUDE_DIRS}
     ${CERES_INCLUDE_DIRS})
 
 ## Add Library
-add_library(calibration_dectector multicam_apriltag_detector.cpp)
+add_library(calibration_dectector src/multicam_apriltag_detector.cpp)
 target_link_libraries(calibration_dectector ${catkin_LIBRARIES} ${YAML_CPP_LIBRARIES})
 
-add_library(calibrator calibrator.cpp)
+add_library(calibrator src/calibrator.cpp)
 target_link_libraries(calibrator 
     ${catkin_LIBRARIES} 
     ${YAML_CPP_LIBRARIES} 
@@ -52,7 +52,7 @@ target_link_libraries(calibrator
     ${CERES_LIBRARIES})
 
 ## Add Executable
-add_executable(load_calibration_data load_calibration_data.cpp)
+add_executable(load_calibration_data src/load_calibration_data.cpp)
 target_link_libraries(load_calibration_data 
     calibration_dectector
     calibrator
@@ -62,7 +62,7 @@ target_link_libraries(load_calibration_data
     ${YAML_CPP_LIBRARIES}
     ${OpenCV_LIBRARIES})
 
-add_executable(ros2web ros2web.cpp)
+add_executable(ros2web src/ros2web.cpp)
 target_link_libraries(ros2web
     ${catkin_LIBRARIES} 
     ${PCL_LIBRARIES}
@@ -70,14 +70,14 @@ target_link_libraries(ros2web
     ${YAML_CPP_LIBRARIES}
     ${OpenCV_LIBRARIES})
 
-add_executable(calibration_from_file calibration_from_file.cpp)
+add_executable(calibration_from_file src/calibration_from_file.cpp)
 target_link_libraries(calibration_from_file
     calibrator
     ${PCL_LIBRARIES}
     ${YAML_CPP_LIBRARIES}
     ${OpenCV_LIBRARIES})
 
-add_executable(calibration_icp calibration_icp.cpp)
+add_executable(calibration_icp src/calibration_icp.cpp)
 target_link_libraries(calibration_icp
     ${PCL_LIBRARIES}
     ${Boost_LIBRARIES} 
