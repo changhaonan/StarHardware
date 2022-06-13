@@ -39,6 +39,18 @@ The idea of multi-camera calibration is: we want to find their relative transfor
 
 How we are doing it is we will mark the same points in multiple different cameras. Then the problem is a purely **PNP** Problem.
 
+Save bag into images
+
+1. `rosrun multicam_calibration ros2web`
+
+Label the configuration
+
+2. `blabla calibration.py`
+
+Calibration from feature, (lacking configuration file)
+
+3. `rosrun multicam_calibration calibration_from_file `
+
 ### Dependency
 
 ceres: 2.1.0

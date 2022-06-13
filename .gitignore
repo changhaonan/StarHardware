@@ -1,6 +1,5 @@
 .vscode
 devel
 build
-data
 .catkin_tools
 *.bag

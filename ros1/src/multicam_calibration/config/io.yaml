@@ -1,0 +1,13 @@
+# Topic remapping
+cam-0:
+  point_cloud_topic: "/camera1/depth/color/points"
+  depth_topic: "/camera1/aligned_depth_to_color/image_raw"
+  color_topic: "/camera1/color/image_raw"
+cam-1:
+  point_cloud_topic: "/camera2/depth/color/points"
+  depth_topic: "/camera2/aligned_depth_to_color/image_raw"
+  color_topic: "/camera2/color/image_raw"
+cam-2:
+  point_cloud_topic: "/camera3/depth/color/points"
+  depth_topic: "/camera3/aligned_depth_to_color/image_raw"
+  color_topic: "/camera3/color/image_raw"

@@ -1,7 +1,6 @@
 <launch>
   <!-- Start multiple camera -->
   <include file="$(find multicam_calibration)/launch/rs_multiple_devices_aligned.launch">
-    <!-- <arg name="align_depth" value="true"/> -->
     <arg name="serial_no_camera1" value="109422062805"/>
     <arg name="serial_no_camera2" value="104122062163"/>
     <arg name="serial_no_camera3" value="749512060230"/>

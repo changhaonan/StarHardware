@@ -120,7 +120,7 @@ namespace multicam_calibration {
 
         Eigen::Matrix4d cam_to_worlds[num_camera];
         for (auto i = 0; i < num_camera; ++i) {
-            std::string cam_name = "cam" + std::to_string(i);
+            std::string cam_name = "cam-" + std::to_string(i);
             cam_to_worlds[i] = ParseMatrix4d(cam_pose_config[cam_name].as<YAML::Node>());
         }
 
@@ -272,7 +272,7 @@ namespace multicam_calibration {
         json output_json;
         
         for (auto cam_idx = 0; cam_idx < num_camera; ++cam_idx) {
-            std::string cam_name = "cam" + std::to_string(cam_idx);
+            std::string cam_name = "cam-" + std::to_string(cam_idx);
             // Extrinsic
             json exstrinsic_json;
             Easy3DViewer::WriteMatrix<double, 4, 4>(
