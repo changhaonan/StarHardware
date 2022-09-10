@@ -38,6 +38,9 @@ target_link_libraries(ros2img
     ${Boost_LIBRARIES} 
     ${OpenCV_LIBRARIES})
 
-## Install
+## Install configuration and launch files
 install(DIRECTORY launch/ DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch)
 install(DIRECTORY config/ DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/config)
+
+## Install python scripts
+install(PROGRAMS scripts/ros_transfer_img.py DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
