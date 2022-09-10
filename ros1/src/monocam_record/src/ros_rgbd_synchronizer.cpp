@@ -71,8 +71,8 @@ void star::star_ros::ROSRGBDSynchronizer::SaveToImage(const std::string &save_di
     unsigned save_index = 0;
     for (unsigned i = start_index; i < true_end_index; i += step) {
         const RgbDepthPair& pair = m_rgb_depth_pair_list[i];
-        cv_bridge::CvImageConstPtr rgb_cv_ptr = cv_bridge::toCvShare(pair.rgb_msg);
-        cv_bridge::CvImageConstPtr depth_cv_ptr = cv_bridge::toCvShare(pair.depth_msg);
+        cv_bridge::CvImageConstPtr rgb_cv_ptr = cv_bridge::toCvShare(pair.rgb_msg, sensor_msgs::image_encodings::BGR8);
+        cv_bridge::CvImageConstPtr depth_cv_ptr = cv_bridge::toCvShare(pair.depth_msg, sensor_msgs::image_encodings::TYPE_16UC1);
 
         std::string color_img_name = Easy3DViewer::FileNameVolumeDeform(
             boost::filesystem::path(save_dir), 0, save_index, Easy3DViewer::color_img_file).string();

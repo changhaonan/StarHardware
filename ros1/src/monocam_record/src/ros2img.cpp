@@ -65,7 +65,7 @@ void SaveRGBDImageFromROSBag(
     const std::string& depth_topic_name,  
     const std::string& save_dir) {
     // 1. Save color image
-    SaveTopicImageFromROSBag(bag, color_topic_name, save_dir, encodings::RGB8); 
+    SaveTopicImageFromROSBag(bag, color_topic_name, save_dir, encodings::BGR8); 
 
     // 2. Save depth image
     SaveTopicImageFromROSBag(bag, depth_topic_name, save_dir, encodings::TYPE_16UC1);
