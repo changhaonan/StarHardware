@@ -4,3 +4,6 @@ build
 .catkin_tools
 *.bag
 install
+
+# Images
+cam-00

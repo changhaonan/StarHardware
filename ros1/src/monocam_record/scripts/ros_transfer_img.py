@@ -1,7 +1,7 @@
 import os
 
 if __name__ == "__main__":
-    bag_file = "/home/robot-learning/Projects/StarHardware/ros1/src/monocam_record/data/realsense2_2022-09-09-22-06-52.bag"
+    bag_file = "/home/robot-learning/Projects/StarHardware/ros1/src/monocam_record/data/realsense2_2022-09-09-22-44-25.bag"
     color_topic_name = "/rgb_map"
     depth_topic_name = "/depth_map"
     save_dir = "."

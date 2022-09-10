@@ -31,17 +31,12 @@ include_directories(include
     ${Eigen_INCLUDE_DIRS}
     ${context_dir})
 
-## Add library
-add_library(ros_transfer_utils src/ros_transfer_utils.cpp)
-target_link_libraries(ros_transfer_utils ${catkin_LIBRARIES} ${Boost_LIBRARIES})
-
 ## Add executable
 add_executable(ros2img src/ros2img.cpp)
 target_link_libraries(ros2img 
     ${catkin_LIBRARIES} 
     ${Boost_LIBRARIES} 
-    ${OpenCV_LIBRARIES} 
-    ros_transfer_utils)
+    ${OpenCV_LIBRARIES})
 
 ## Install
 install(DIRECTORY launch/ DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch)
