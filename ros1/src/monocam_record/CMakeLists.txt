@@ -31,6 +31,13 @@ include_directories(include
     ${Eigen_INCLUDE_DIRS}
     ${context_dir})
 
+## Add library
+add_library(ros_rgbd_synchronizer src/ros_rgbd_synchronizer.cpp)
+target_link_libraries(ros_rgbd_synchronizer 
+    ${catkin_LIBRARIES}
+    ${Boost_LIBRARIES} 
+    ${OpenCV_LIBRARIES})
+
 ## Add executable
 add_executable(ros2img src/ros2img.cpp)
 target_link_libraries(ros2img 
@@ -38,9 +45,16 @@ target_link_libraries(ros2img
     ${Boost_LIBRARIES} 
     ${OpenCV_LIBRARIES})
 
+add_executable(ros2img_sync src/ros2img_sync.cpp)
+target_link_libraries(ros2img_sync
+    ${catkin_LIBRARIES} 
+    ${Boost_LIBRARIES} 
+    ${OpenCV_LIBRARIES}
+    ros_rgbd_synchronizer)
+
 ## Install configuration and launch files
 install(DIRECTORY launch/ DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch)
 install(DIRECTORY config/ DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/config)
 
 ## Install python scripts
-install(PROGRAMS scripts/ros_transfer_img.py DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+catkin_install_python(PROGRAMS scripts/ros_transfer_img.py DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})

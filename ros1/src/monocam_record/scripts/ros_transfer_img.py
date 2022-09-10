@@ -1,3 +1,4 @@
+from ast import arguments
 import os
 import argparse
 
@@ -7,7 +8,13 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-s", "--root_save_dir", type=str, default=".")
     parser.add_argument("-d", "--root_data_dir", type=str, default=default_root_dir)
+    parser.add_argument("--sync", action="store_true")
+    parser.add_argument("--no-sync", dest="sync", action="store_false")
+    parser.add_argument("-b", "--start_index", type=int, default=0)
+    parser.add_argument("-e", "--end_index", type=int, default=0)
+    parser.add_argument("-p", "--step", type=int, default=1)
     args = parser.parse_args()
+    print(args)
 
     root_save_dir = args.root_save_dir
     root_data_dir = args.root_data_dir
@@ -31,7 +38,11 @@ if __name__ == "__main__":
             os.makedirs(os.path.join(save_dir, "cam-00"))
     
         # 3.2. Transfer the data
-        os.system(f"rosrun monocam_record ros2img --bag_file {bag_file} --color_topic_name {color_topic_name} --depth_topic_name {depth_topic_name} --save_dir {save_dir}")
-
+        if args.sync:
+            print("Run transfer with sync!")
+            os.system(f"rosrun monocam_record ros2img_sync --bag_file {bag_file} --color_topic_name {color_topic_name} --depth_topic_name {depth_topic_name} --save_dir {save_dir} --start_index {args.start_index} --end_index {args.end_index} --step {args.step}")
+        else:
+            print("Run transfer without sync!")
+            os.system(f"rosrun monocam_record ros2img --bag_file {bag_file} --color_topic_name {color_topic_name} --depth_topic_name {depth_topic_name} --save_dir {save_dir}")
         # 3.3. log
         print(f"Transfer the data from {bag_file} to {save_dir} successfully!")
