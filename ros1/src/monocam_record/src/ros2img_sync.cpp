@@ -21,6 +21,8 @@ int main(int argc, char** argv) {
     unsigned start_index;
     unsigned end_index;
     unsigned step;
+    float clip_near;
+    float clip_far;
 
     // 2. Parse arguments
     po::options_description desc("Allowed options");
@@ -34,6 +36,8 @@ int main(int argc, char** argv) {
         ("start_index", po::value<unsigned>(&start_index), "start index")
         ("end_index", po::value<unsigned>(&end_index), "end index")
         ("step", po::value<unsigned>(&step), "step")
+        ("clip_near", po::value<float>(&clip_near)->default_value(0.1), "clip near")
+        ("clip_far", po::value<float>(&clip_far)->default_value(10.0), "clip far")
     ;
 
     po::variables_map vm;
@@ -101,8 +105,20 @@ int main(int argc, char** argv) {
         step = 1;
     }
 
+    if (vm.count("clip_near")) {
+        std::cout << "clip_near: " << vm["clip_near"].as<float>() << std::endl;
+    } else {
+        std::cout << "clip_near is not set, using default 0.1" << std::endl;
+    }
+
+    if (vm.count("clip_far")) {
+        std::cout << "clip_far: " << vm["clip_far"].as<float>() << std::endl;
+    } else {
+        std::cout << "clip_far is not set, using default 10.0" << std::endl;
+    }
+
     // 3. Create a ROSRGBDSynchronizer
-    star::star_ros::ROSRGBDSynchronizer synchronizer(bag_file, color_topic_name, depth_topic_name, camera_info_topic_name);
+    star::star_ros::ROSRGBDSynchronizer synchronizer(bag_file, color_topic_name, depth_topic_name, camera_info_topic_name, clip_near, clip_far);
     synchronizer.SyncFromROSBag();
     synchronizer.SaveToImage(save_dir, start_index, end_index, step);
 }

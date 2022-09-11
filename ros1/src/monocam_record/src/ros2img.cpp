@@ -80,6 +80,9 @@ int main(int argc, char** argv) {
     std::string color_topic_name;
     std::string depth_topic_name;
     std::string save_dir;
+    // 1.2. Scene-related parameters
+    float clip_near;
+    float clip_far;
 
     // 2. Parse arguments
     po::options_description desc("Allowed options");
@@ -89,6 +92,8 @@ int main(int argc, char** argv) {
         ("color_topic_name", po::value<std::string>(&color_topic_name), "color topic name")
         ("depth_topic_name", po::value<std::string>(&depth_topic_name), "depth topic name")
         ("save_dir", po::value<std::string>(&save_dir), "save dir")
+        ("clip_near", po::value<float>(&clip_near)->default_value(0.1), "clip near")
+        ("clip_far", po::value<float>(&clip_far)->default_value(10.0), "clip far")
     ;
 
     po::variables_map vm;
@@ -126,6 +131,18 @@ int main(int argc, char** argv) {
     } else {
         std::cout << "save_dir is not set." << std::endl;
         return 1;
+    }
+
+    if (vm.count("clip_near")) {
+        std::cout << "clip_near: " << vm["clip_near"].as<float>() << std::endl;
+    } else {
+        std::cout << "clip_near is not set, using default 0.1" << std::endl;
+    }
+
+    if (vm.count("clip_far")) {
+        std::cout << "clip_far: " << vm["clip_far"].as<float>() << std::endl;
+    } else {
+        std::cout << "clip_far is not set, using default 10.0" << std::endl;
     }
 
     // 3. Open bag file

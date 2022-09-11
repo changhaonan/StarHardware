@@ -5,11 +5,15 @@ star::star_ros::ROSRGBDSynchronizer::ROSRGBDSynchronizer(
     const std::string& rgb_topic_name, 
     const std::string& depth_topic_name, 
     const std::string& camera_info_topic_name,
+    const float clip_near,
+    const float clip_far,
     const int queue_size)
     :
     m_bag_name(bag_name),
     m_rgb_topic_name(rgb_topic_name),
     m_depth_topic_name(depth_topic_name),
+    m_clip_near(clip_near),
+    m_clip_far(clip_far),
     m_camera_info_topic_name(camera_info_topic_name),
     m_sync(star::star_ros::ApproxSyncPolicy_2(queue_size), m_rgb_sub, m_depth_sub)
 {
@@ -41,8 +45,8 @@ void star::star_ros::ROSRGBDSynchronizer::SyncFromROSBag() {
             if (camera_info != nullptr && !m_camera_initialized) {
                 m_rgbd_camera.intrinsic = { camera_info->K[0], camera_info->K[4], camera_info->K[2], camera_info->K[5] };
                 m_rgbd_camera.extrinsic = Eigen::Matrix4d::Identity();  // Monocular camera, thus extrinsic is identity
-                m_rgbd_camera.clip = { 0.1, 10.0 };  // Classical clip value
-                m_rgbd_camera.downsample_scale = 1.0;  // No downsample by default
+                m_rgbd_camera.clip = { m_clip_near, m_clip_far };
+                m_rgbd_camera.downsample_scale = 1.0;   // No downsample by default
                 m_rgbd_camera.resolution = { camera_info->width, camera_info->height };
                 m_camera_initialized = true;
             }
@@ -58,7 +62,8 @@ void star::star_ros::ROSRGBDSynchronizer::callback(const ImageMsg::ConstPtr& rgb
     m_rgb_depth_pair_list.push_back(pair);
 }
 
-void star::star_ros::ROSRGBDSynchronizer::SaveToImage(const std::string &save_dir, const unsigned start_index, const unsigned end_index, const unsigned step) {
+void star::star_ros::ROSRGBDSynchronizer::SaveToImage(
+    const std::string &save_dir, const unsigned start_index, const unsigned end_index, const unsigned step) {
     // 1. Sanity check
     if (m_rgb_depth_pair_list.empty()) {
         ROS_ERROR("No data to save!");

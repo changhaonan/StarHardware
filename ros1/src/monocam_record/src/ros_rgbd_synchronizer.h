@@ -23,6 +23,8 @@ namespace star { namespace star_ros {
             const std::string& rgb_topic_name, 
             const std::string& depth_topic_name,
             const std::string& camera_info_topic_name, 
+            const float clip_near,
+            const float clip_far,
             const int queue_size=1000);
         ~ROSRGBDSynchronizer() = default;
 
@@ -54,6 +56,9 @@ namespace star { namespace star_ros {
         std::string m_rgb_topic_name;
         std::string m_depth_topic_name;
         std::string m_camera_info_topic_name;
+
+        float m_clip_near;
+        float m_clip_far;
 
         std::vector<RgbDepthPair> m_rgb_depth_pair_list;
     };
