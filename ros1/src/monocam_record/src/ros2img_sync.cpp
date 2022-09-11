@@ -16,6 +16,7 @@ int main(int argc, char** argv) {
     std::string bag_file;
     std::string color_topic_name;
     std::string depth_topic_name;
+    std::string camera_info_topic_name;
     std::string save_dir;
     unsigned start_index;
     unsigned end_index;
@@ -28,6 +29,7 @@ int main(int argc, char** argv) {
         ("bag_file", po::value<std::string>(&bag_file), "bag file")
         ("color_topic_name", po::value<std::string>(&color_topic_name), "color topic name")
         ("depth_topic_name", po::value<std::string>(&depth_topic_name), "depth topic name")
+        ("camera_info_topic_name", po::value<std::string>(&camera_info_topic_name), "camera info topic name")
         ("save_dir", po::value<std::string>(&save_dir), "save dir")
         ("start_index", po::value<unsigned>(&start_index), "start index")
         ("end_index", po::value<unsigned>(&end_index), "end index")
@@ -64,6 +66,13 @@ int main(int argc, char** argv) {
         return 1;
     }
 
+    if (vm.count("camera_info_topic_name")) {
+        std::cout << "camera_info_topic_name: " << vm["camera_info_topic_name"].as<std::string>() << std::endl;
+    } else {
+        std::cout << "camera_info_topic_name is not set, using default: /camera_info" << std::endl;
+        camera_info_topic_name = "/camera_info";
+    }
+
     if (vm.count("save_dir")) {
         std::cout << "save_dir: " << vm["save_dir"].as<std::string>() << std::endl;
     } else {
@@ -93,7 +102,7 @@ int main(int argc, char** argv) {
     }
 
     // 3. Create a ROSRGBDSynchronizer
-    star::star_ros::ROSRGBDSynchronizer synchronizer(bag_file, color_topic_name, depth_topic_name);
+    star::star_ros::ROSRGBDSynchronizer synchronizer(bag_file, color_topic_name, depth_topic_name, camera_info_topic_name);
     synchronizer.SyncFromROSBag();
     synchronizer.SaveToImage(save_dir, start_index, end_index, step);
 }

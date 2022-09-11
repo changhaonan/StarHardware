@@ -4,11 +4,13 @@ star::star_ros::ROSRGBDSynchronizer::ROSRGBDSynchronizer(
     const std::string& bag_name, 
     const std::string& rgb_topic_name, 
     const std::string& depth_topic_name, 
+    const std::string& camera_info_topic_name,
     const int queue_size)
     :
     m_bag_name(bag_name),
     m_rgb_topic_name(rgb_topic_name),
     m_depth_topic_name(depth_topic_name),
+    m_camera_info_topic_name(camera_info_topic_name),
     m_sync(star::star_ros::ApproxSyncPolicy_2(queue_size), m_rgb_sub, m_depth_sub)
 {
     m_sync.registerCallback(boost::bind(&ROSRGBDSynchronizer::callback, this, _1, _2));
@@ -18,7 +20,7 @@ void star::star_ros::ROSRGBDSynchronizer::SyncFromROSBag() {
     // 1. Open bag & create view
     rosbag::Bag bag;
     bag.open(m_bag_name, rosbag::bagmode::Read);
-    std::vector<std::string> topics = {m_rgb_topic_name, m_depth_topic_name};
+    std::vector<std::string> topics = {m_rgb_topic_name, m_depth_topic_name, m_camera_info_topic_name};
     rosbag::View view(bag, rosbag::TopicQuery(topics));
 
     for (const rosbag::MessageInstance& m : view) {
@@ -34,6 +36,17 @@ void star::star_ros::ROSRGBDSynchronizer::SyncFromROSBag() {
                 m_depth_sub.newMessage(depth_image);
             }
         }
+        if (m.getTopic() == m_camera_info_topic_name || ("/" + m.getTopic() == m_camera_info_topic_name)) {
+            sensor_msgs::CameraInfo::ConstPtr camera_info = m.instantiate<sensor_msgs::CameraInfo>();
+            if (camera_info != nullptr && !m_camera_initialized) {
+                m_rgbd_camera.intrinsic = { camera_info->K[0], camera_info->K[4], camera_info->K[2], camera_info->K[5] };
+                m_rgbd_camera.extrinsic = Eigen::Matrix4d::Identity();  // Monocular camera, thus extrinsic is identity
+                m_rgbd_camera.clip = { 0.1, 10.0 };  // Classical clip value
+                m_rgbd_camera.downsample_scale = 1.0;  // No downsample by default
+                m_rgbd_camera.resolution = { camera_info->width, camera_info->height };
+                m_camera_initialized = true;
+            }
+        }
     }
     bag.close();
 }
@@ -46,6 +59,7 @@ void star::star_ros::ROSRGBDSynchronizer::callback(const ImageMsg::ConstPtr& rgb
 }
 
 void star::star_ros::ROSRGBDSynchronizer::SaveToImage(const std::string &save_dir, const unsigned start_index, const unsigned end_index, const unsigned step) {
+    // 1. Sanity check
     if (m_rgb_depth_pair_list.empty()) {
         ROS_ERROR("No data to save!");
         return;
@@ -68,6 +82,7 @@ void star::star_ros::ROSRGBDSynchronizer::SaveToImage(const std::string &save_di
     }
     unsigned true_end_index = std::max(end_index, (unsigned)m_rgb_depth_pair_list.size());
 
+    // 2. Start saving
     unsigned save_index = 0;
     for (unsigned i = start_index; i < true_end_index; i += step) {
         const RgbDepthPair& pair = m_rgb_depth_pair_list[i];
@@ -83,4 +98,11 @@ void star::star_ros::ROSRGBDSynchronizer::SaveToImage(const std::string &save_di
         cv::imwrite(depth_img_name, depth_cv_ptr->image);
         save_index++;
     }
+
+    // 3. Save camera info    
+    auto& context = Easy3DViewer::Context::Instance();   // Create the context && clean the directorys
+    context.clear();
+    context.addCoord("origin", "origin", Eigen::Matrix4f::Identity());
+    context.addRGBDCamera("cam-00", "cam-00", m_rgbd_camera);
+    context.saveTo((boost::filesystem::path(save_dir) / "context.json").string());
 }
